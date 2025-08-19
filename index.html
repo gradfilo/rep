@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Saída</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen font-sans p-4">
+
+    <main class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-4xl space-y-8">
+
+        <header>
+            <h1 class="text-3xl font-bold text-slate-400">Calculadora de Saída</h1>
+        </header>
+
+        <section id="user-inputs">
+            <h2 class="text-xl font-semibold mb-4 text-gray-300 border-b border-gray-700 pb-2">Informações</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="flex flex-col">
+                    <label for="jornada" class="mb-2 font-medium text-gray-400">Jornada</label>
+                    <select id="jornada" class="h-11 text-center bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+                        <option value="8">8 horas</option>
+                        <option value="6">6 horas</option>
+                    </select>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="entrada" class="mb-2 font-medium text-green-400">Entrada</label>
+                <input type="time" id="entrada"
+                class="h-11 text-center bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+            </div>
+
+            <div class="flex flex-col">
+                <label for="saldo-negativo" class="mb-2 font-medium text-red-400">Saldo Negativo</label>
+                <!-- <input type="time" id="saldo-negativo" value="00:00" class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none"> -->
+                 <input
+                    type="text"
+                    id="saldo-negativo"
+                    value="00:00"
+                    maxlength="5"
+                    inputmode="numeric"
+                    pattern="\d{2}:\d{2}"
+                    class="text-center h-11 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
+                >
+            </div>
+
+            <div id="intervalo-wrapper" class="flex flex-col">
+                <label for="intervalo" class="mb-2 font-medium text-gray-400">Intervalo</label>
+                <input type="time" id="intervalo" value="01:00"
+                class="text-center h-11 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none">
+            </div>
+
+        </div>
+    </section>
+
+    <section id="saida">
+        <h2 class="text-xl font-semibold mb-4 text-gray-300 border-b border-gray-700 pb-2">Opções de Saída</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-gray-900/50 px-3 py-4 rounded-lg flex items-center justify-between">
+                <h3 id="saida-normal-label" class="font-medium text-gray-300">Normal</h3>
+                <p id="saida-normal" class="text-lg font-semibold text-cyan-400">--:--</p>
+            </div>
+            <div class="bg-purple-700/20 px-3 py-2 rounded-lg flex items-center justify-between gap-3 border border-purple-500/10">
+                <h3 class="font-medium text-gray-300">Personalizada</h3>
+                <div class="flex items-center w-full gap-2">
+                    <input type="time" id="tempo-personalizado" value="00:00" class="bg-gray-800 border border-gray-600 rounded-lg px-2 py-1 w-24 focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                    <button id="reset-personalizado-btn" title="Resetar" class="flex-shrink-0 p-1.5 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="currentColor" d="M84.539 21.586a1.515 1.515 0 0 0-2.393-1.222l-5.944 4.261l-.468.337c-6.405-6.392-15.196-10.389-24.937-10.389c-19.535 0-35.427 15.894-35.427 35.428s15.893 35.428 35.427 35.428a35.42 35.42 0 0 0 29.374-15.618a1.77 1.77 0 0 0-.475-2.462l-8.863-6.151a1.9 1.9 0 0 0-2.628.512c-3.918 5.792-10.41 9.25-17.375 9.25c-11.558 0-20.962-9.402-20.962-20.957s9.404-20.957 20.962-20.957c4.878 0 9.352 1.696 12.914 4.5l-1.001.72l-5.948 4.26a1.513 1.513 0 0 0 .397 2.656l25.446 8.669c.461.161.966.083 1.368-.203c.399-.29.629-.747.627-1.231z" /></svg>
+                    </button>
+                    <p id="saida-personalizada" class="text-lg font-semibold text-purple-400 ml-auto text-right">--:--</p>
+                </div>
+            </div>
+            <div class="bg-gray-900/50 px-3 py-4 rounded-lg flex items-center justify-between">
+                <h3 class="font-medium text-gray-300">Pagar 11 minutos (mínimo)</h3>
+                <p id="saida-11-min" class="text-lg font-semibold text-pink-400">--:--</p>
+            </div>
+            <div class="bg-gray-900/50 px-3 py-4 rounded-lg flex items-center justify-between">
+                <h3 class="font-medium text-gray-300">Pagar 2 horas (máximo)</h3>
+                <p id="saida-2-horas" class="text-lg font-semibold text-orange-400">--:--</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="extrato">
+    <h2 class="text-xl font-semibold mb-4 text-gray-300 border-b border-gray-700 pb-2">Extrato do Período</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-gray-900/50 p-4 rounded-lg">
+            <h3 class="text-sm font-medium text-gray-400">Dias Úteis Restantes</h3>
+            <p id="dias-uteis" class="text-2xl font-semibold">--</p>
+        </div>
+        <div class="bg-gray-900/50 p-4 rounded-lg">
+            <h3 class="text-sm font-medium text-gray-400">Total Devedor (com pontes)</h3>
+            <p id="total-devedor" class="text-2xl font-semibold text-red-400">--:--</p>
+        </div>
+        <div class="bg-gray-900/50 p-4 rounded-lg">
+            <h3 class="text-sm font-medium text-gray-400">Pagar por Dia (sugestão)</h3>
+            <p id="pagar-por-dia" class="text-2xl font-semibold text-yellow-400">--:--</p>
+        </div>
+    </div>
+</section>
+
+<section id="period-data" class="pt-4 border-t border-gray-700">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+        <div>
+            <h3 class="font-semibold text-gray-300">Fim do Período</h3>
+            <p id="fim-periodo" class="text-cyan-400">--</p>
+        </div>
+        <div>
+            <h3 class="font-semibold text-gray-300">Pontes</h3>
+            <ul id="lista-pontes" class="text-gray-400">
+                <li>--</li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="font-semibold text-gray-300">Feriados</h3>
+            <ul id="lista-feriados" class="text-gray-400">
+                <li>--</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<script src="app.js"></script>
+</body>
+
+</html>
