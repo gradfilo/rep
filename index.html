@@ -9,7 +9,12 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <style>
         input[type="time"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.8);
+            /* filter: invert(0.8); */
+            display: none;
+        }
+
+        *::selection {
+            background-color: #3176d2;
         }
     </style>
 </head>
@@ -50,6 +55,8 @@
                     maxlength="5"
                     inputmode="numeric"
                     pattern="\d{2}:\d{2}"
+                    autocomplete="off"
+                    spellcheck="false"
                     class="text-center h-11 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-cyan-500 focus:outline-none"
                 >
             </div>
@@ -81,11 +88,11 @@
                 </div>
             </div>
             <div class="bg-gray-900/50 px-3 py-4 rounded-lg flex items-center justify-between">
-                <h3 class="font-medium text-gray-300">Pagar 11 minutos (mínimo)</h3>
+                <h3 class="font-medium text-gray-300">Pagar <strong class="text-pink-400">11 minutos</strong> (mínimo)</h3>
                 <p id="saida-11-min" class="text-lg font-semibold text-pink-400">--:--</p>
             </div>
             <div class="bg-gray-900/50 px-3 py-4 rounded-lg flex items-center justify-between">
-                <h3 class="font-medium text-gray-300">Pagar 2 horas (máximo)</h3>
+                <h3 class="font-medium text-gray-300">Pagar <strong class="text-orange-400">2 horas</strong> (máximo)</h3>
                 <p id="saida-2-horas" class="text-lg font-semibold text-orange-400">--:--</p>
             </div>
         </div>

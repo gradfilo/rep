@@ -6,8 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formatTime = (value) => {
         const nums = value.replace(/[^\d]/g, '')
-        const hours = nums.slice(0, 2).padStart(2, '0')
-        const minutes = nums.slice(2, 4).padStart(2, '0')
+        let hours = nums.slice(0, 2).padStart(2, '0')
+        let minutes = nums.slice(2, 4).padStart(2, '0')
+
+        if (minutes > 59) {
+            minutes = '00'
+            hours++
+        }
+
         return `${hours}:${minutes}`
     }
 
@@ -174,34 +180,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
         elements.resetPersonalizadoBtn.addEventListener('click', resetarCampoPersonalizado)
 
+        elements.saldoNegativo.addEventListener('focus', e => {
+            e.target.setSelectionRange(0, 2)
+        })
+
         elements.saldoNegativo.addEventListener('keydown', (e) => {
-            if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
-            e.preventDefault()
-
-            const [hoursStr, minutesStr] = e.target.value.split(':')
-            let hours = parseInt(hoursStr, 10)
-            let minutes = parseInt(minutesStr, 10)
-            const cursorPos = e.target.selectionStart
-
-            if (cursorPos <= 2) {
-                hours = e.key === 'ArrowUp' ? hours + 1 : hours - 1
-                if (hours < 0) hours = 0
-            } else {
-                minutes = e.key === 'ArrowUp' ? minutes + 1 : minutes - 1
-
-                if (minutes > 59) {
-                    minutes = 0
-                    hours += 1
-                }
-                if (minutes < 0) {
-                    minutes = 59
-                    if (hours > 0) hours -= 1
-                }
+            if (e.target.selectionStart <= 2 && ((!e.shiftKey && e.key == 'Tab') || e.key == 'ArrowRight')) {
+                e.preventDefault()
+                e.target.setSelectionRange(3, 5)
             }
-            const newHours = String(hours).padStart(2, '0')
-            const newMinutes = String(minutes).padStart(2, '0')
-            e.target.value = `${newHours}:${newMinutes}`
-            e.target.setSelectionRange(cursorPos, cursorPos)
+
+            if (e.target.selectionStart >= 3 && ((e.shiftKey && e.key == 'Tab') || e.key == 'ArrowLeft')) {
+                e.preventDefault()
+                e.target.setSelectionRange(0, 2)
+            }
+
+            if (e.code.startsWith('Digit') || e.code.startsWith('Numpad')) {
+                e.preventDefault()
+
+                const sel = e.target.selectionStart
+                e.target.value = formatTime(e.target.value.slice(0, sel) + e.key + e.target.value.slice(sel+1))
+
+                if (e.target.value.slice(sel+1, sel+2) == ':') e.target.setSelectionRange(3, 5)
+                else e.target.setSelectionRange(sel+1, sel+1)
+            }
+
+            if (e.key == 'ArrowUp' || e.key == 'ArrowDown') {
+                e.preventDefault()
+
+                const [hoursStr, minutesStr] = e.target.value.split(':')
+                let hours = parseInt(hoursStr, 10)
+                let minutes = parseInt(minutesStr, 10)
+                const cursorPos = e.target.selectionStart
+
+                if (cursorPos <= 2) {
+                    hours = e.key === 'ArrowUp' ? hours + 1 : hours - 1
+                    if (hours < 0) hours = 0
+                } else {
+                    minutes = e.key === 'ArrowUp' ? minutes + 1 : minutes - 1
+
+                    if (minutes > 59) {
+                        minutes = 0
+                        hours += 1
+                    }
+                    if (minutes < 0) {
+                        minutes = 59
+                        if (hours > 0) hours -= 1
+                    }
+                }
+                const newHours = String(hours).padStart(2, '0')
+                const newMinutes = String(minutes).padStart(2, '0')
+                e.target.value = `${newHours}:${newMinutes}`
+                e.target.setSelectionRange(cursorPos, cursorPos+2)
+            }
+
             calcularTudo()
             resetarCampoPersonalizado()
         })
